@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">EEnergia-CTPI 1.0</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="inicio">Inicio</string>
+    <string name="tarjeta1">Tarjeta 1</string>
+    <string name="tarjeta2">Tarjeta 2</string>
+    <string name="tarjeta3">Tarjeta 3</string>
+    <string name="contactanos">Contáctanos</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="perfil">Perfil</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+
+    <string name="informacion_principal">El grupo de Investigación, Desarrollo Tecnológico e innovación CTPI SENA Cauca(Innovatec), como parte de sus líneas de investigación desarrollar proyectos de investigación aplicada e innovación en energías renovables, eficiencia energétìca y gestión de la energía; con lo cual busca aportar en el desarrollo regional y nacional mediante los resultados obtenidos en cada uno de los proyectos desarrollados, adicionalmente se busca dar soluciones a problemáticas reales de zonas rurales, urbanas, empresariales, industriales y en general problemáticas que involucren el uso e integración de las energías renovables de la mano de la eficiencia energética.\n \nAqui podrá tener acceso a gráficas de tiempo real de irradiancia solar, humedad relativa, temperatura ambiente, corriente, voltaje y potencia fotovoltaica; así como acceso  al módulo de consultas  por dia, semana o mes de interés para el análisis de producción fotovoltaica, para el acceso a base de datos deberá registrarse en la página web del grupo de investigación (por definir), adicionalmente se cuenta con aplicaciones para proyectos específicos con energía renovables y eficiencia energética </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="mensaje_contactanos">Grupo de investigación INNOVATEC-CTPI\nCentro de teleinformática y producción Industrial del SENA regional Cauca\nLínea de investigación en energías renovables y eficiencia energética\n\nInvestigador Líder: Rodrigo Montaño F.\n\nContacto 1: romontano@misena.edu.co\n\nContacto 2: solarctpi@gmail.com
+        \n\nSemillero de investigación en energías renovables y eficiencia energética SEINEREE\n\nUbicación: Popayán-Cauca, Casa Solar</string>
+    <string name="link_googlemaps">https://goo.gl/maps/oj9YJjY5JZN2</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="crear_cuenta">Crear cuenta</string>
+    <string name="ingrese_usuario">Ingrese su correo electrónico</string>
+    <string name="ingrese_contrasena">Ingrese su contraseña</string>
+    <string name="se_ha_olvidado_de_contrasena">Se ha olvidado de su contraseña</string>
+
+    <string name="enero">Enero</string>
+    <string name="febrero">Febrero</string>
+    <string name="marzo">Marzo</string>
+    <string name="abril">Abril</string>
+    <string name="mayo">Mayo</string>
+    <string name="junio">Junio</string>
+    <string name="julio">Julio</string>
+    <string name="agosto">Agosto</string>
+    <string name="septiembre">Septiembre</string>
+    <string name="octubre">Octubre</string>
+    <string name="noviembre">Noviembre</string>
+    <string name="diciembre">Diciembre</string>
+    <string name="acerca_de">Acerca de</string>
+    <string name="paginas">Páginas</string>
+    <string name="conocenos">Conócenos</string>
+    <string name="no_hay_datos">No hay datos del día seleccionado</string>
+    <string name="domingo">Domingo</string>
+    <string name="lunes">Lunes</string>
+    <string name="martes">Martes</string>
+    <string name="miercoles">Miércoles</string>
+    <string name="jueves">Jueves</string>
+    <string name="viernes">Viernes</string>
+    <string name="sabado">Sábado</string>
+    <string name="tipo_uso">Tipo de uso</string>
+    <string name="academico">Académido</string>
+    <string name="empresarial">Empresarial</string>
+    <string name="comercial">Comercial</string>
+    <string name="otro">Otro</string>
+
+    <string name="tarjeta1_tiempo">Tarjeta 1 vs Tiempo</string>
+    <string name="tarjeta2_tiempo">Tarjeta 2 vs Tiempo</string>
+    <string name="tarjeta3_tiempo">Tarjeta 3 vs Tiempo</string>
+    <string name="tarjetas_tiempo">Tarjetas vs Tiempo</string>
+    <string name="potencias_tiempo">Potencias vs Tiempo</string>
+
+    <string name="mensaje">Contacto: romontano@misena.edu.co</string>
+    <string name="hora">Hora</string>
+    <string name="dia">Día</string>
+    <string name="consultas">Consultas</string>
+
+</resources>
