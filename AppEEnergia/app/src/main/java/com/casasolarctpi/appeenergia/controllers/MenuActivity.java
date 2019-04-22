@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.casasolarctpi.appeenergia.R;
+import com.casasolarctpi.appeenergia.fragments.ConsultasFragment;
 import com.casasolarctpi.appeenergia.fragments.ContactanosFragment;
 import com.casasolarctpi.appeenergia.fragments.IndexFragment;
 import com.casasolarctpi.appeenergia.fragments.PerfilFragment;
@@ -263,38 +264,35 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         expaAdaperConsultas.setOnChildClickListener(new ExpandableListAdapter.OnChildClickListener() {
             @Override
             public void childClick(int groupId, int childId) {
-                //ConsultasFragment.modoGraficar=childId;
+                ConsultasFragment.modoGraficar=childId;
+                getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
                 switch (childId){
                     case 0:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
                         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.tarjeta1_tiempo);
                         txtTitle.setText(getResources().getString(R.string.tarjeta1_tiempo));
                         closeDrawer();
                         break;
 
                     case 1:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
                         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.tarjeta2_tiempo);
                         txtTitle.setText(getResources().getString(R.string.tarjeta2_tiempo));
                         closeDrawer();
                         break;
 
                     case 2:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
+
                         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.tarjeta3_tiempo);
                         txtTitle.setText(getResources().getString(R.string.tarjeta3_tiempo));
                         closeDrawer();
                         break;
 
                     case 3:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
                         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.tarjetas_tiempo);
                         txtTitle.setText(getResources().getString(R.string.tarjetas_tiempo));
                         closeDrawer();
                         break;
 
                     case 4:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu, new ConsultasFragment()).commit();
                         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.potencias_tiempo);
                         txtTitle.setText(getResources().getString(R.string.potencias_tiempo));
                         closeDrawer();
@@ -334,7 +332,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 txtTitle.setText(getResources().getString(R.string.inicio));
                 closeDrawer();
                 break;
-
             case R.id.cLContactanos:
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu,new ContactanosFragment()).commit();
                 Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.contactanos));

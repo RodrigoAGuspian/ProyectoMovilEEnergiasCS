@@ -69,5 +69,16 @@
     <string name="hora">Hora</string>
     <string name="dia">Día</string>
     <string name="consultas">Consultas</string>
+    <string name="title_activity_consultas_fragment">ConsultasFragment</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="seleccione_dia">Selecione Día</string>
+    <string name="seleccione_dia_semana">Seleccione día de la semana</string>
+    <string name="graficar">Graficar</string>
+    <string name="semana">Semana</string>
+    <string name="mes">Mes</string>
 
 </resources>

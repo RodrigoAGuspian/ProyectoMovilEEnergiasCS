@@ -113,6 +113,7 @@ public class Splash extends AppCompatActivity {
     private void transicionToMenuActivity() {
         Intent intent = new Intent(Splash.this,LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
 
