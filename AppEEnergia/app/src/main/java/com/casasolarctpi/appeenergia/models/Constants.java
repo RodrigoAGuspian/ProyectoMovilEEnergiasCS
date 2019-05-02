@@ -40,6 +40,24 @@ public class Constants {
     //Lista de tipos de uso
     public static final String[] LIST_TIPO_DE_USO = {Splash.context.getString(R.string.academico),Splash.context.getString(R.string.empresarial),Splash.context.getString(R.string.comercial),Splash.context.getString(R.string.otro)};
 
+    //Lista de los datos a utilizar;
+    public  static final String[] tipoDeDato={
+            Splash.context.getString(R.string.corriente1),Splash.context.getString(R.string.corriente2),Splash.context.getString(R.string.corriente3),
+            Splash.context.getString(R.string.potencia1),Splash.context.getString(R.string.potencia2),Splash.context.getString(R.string.potencia3)
+    };
+
+    public  static final String[] tipoDeDato1={
+            Splash.context.getString(R.string.c1),Splash.context.getString(R.string.c2),Splash.context.getString(R.string.c3),
+            Splash.context.getString(R.string.p1),Splash.context.getString(R.string.p2),Splash.context.getString(R.string.p3)
+    };
+
+    //Lista de colores de las gráficas
+
+    public static final int [] coloresGrafica={
+            R.color.colorCorriente1,R.color.colorCorriente2,R.color.colorCorriente3,
+            R.color.colorPotencia1,R.color.colorPotencia2,R.color.colorPotencia3,
+    };
+
 
 
 

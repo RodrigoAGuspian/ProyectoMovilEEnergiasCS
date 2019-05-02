@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "725121675421",
+    "firebase_url": "https://eenergiasctpi.firebaseio.com",
+    "project_id": "eenergiasctpi",
+    "storage_bucket": "eenergiasctpi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725121675421:android:bfe5f6125205a18e",
+        "android_client_info": {
+          "package_name": "com.casasolarctpi.appeenergia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725121675421-k9ll5bd45tgo3ka0i3o4ad02ct3aq7d4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.casasolarctpi.appeenergia",
+            "certificate_hash": "19d9c2b22d0d97f16e74487ebaa2b06e0b6a0697"
+          }
+        },
+        {
+          "client_id": "725121675421-smh6jhbq8qb098tbonqbg884vjsuvpcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-1wb4wMQ-lIswNCW84s0Yq8-zJ4JECbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725121675421-smh6jhbq8qb098tbonqbg884vjsuvpcj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

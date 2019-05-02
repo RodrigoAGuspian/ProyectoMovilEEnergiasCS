@@ -15,5 +15,13 @@
     <color name="colorMenu">#000000</color>
     <color name="colorAzul">#1C88B0</color>
 
+    <color name="colorPotencia1">#AB47BC</color>
+    <color name="colorPotencia2">#9C27B0</color>
+    <color name="colorPotencia3">#6A1B9A</color>
+
+    <color name="colorCorriente1">#FBC02D</color>
+    <color name="colorCorriente2">#FFA000</color>
+    <color name="colorCorriente3">#EF6C00</color>
+
 
 </resources>

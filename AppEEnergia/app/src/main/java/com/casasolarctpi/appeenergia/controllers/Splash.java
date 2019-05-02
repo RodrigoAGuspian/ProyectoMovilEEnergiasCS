@@ -13,6 +13,9 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import com.casasolarctpi.appeenergia.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,17 +23,19 @@ import java.util.TimerTask;
 public class Splash extends AppCompatActivity {
     ImageView imageView;
     public static Context context;
+    private FirebaseAuth mAuth;
     boolean bandera = true;
     int valor =0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         context = this;
+        FirebaseApp.initializeApp(this);
         imageView = findViewById(R.id.imgSplash);
         imageView.setVisibility(View.INVISIBLE);
+        inizialiteFirebase();
         bandera= true;
         valor=0;
         new Thread(new Runnable() {
@@ -62,46 +67,67 @@ public class Splash extends AppCompatActivity {
 
     public void animationSplash(){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            Animator animator = ViewAnimationUtils.createCircularReveal(imageView,0,imageView.getWidth(),0,imageView.getHeight()*1.5f);
-            final Animator animator1 = ViewAnimationUtils.createCircularReveal(imageView,imageView.getWidth()/2,imageView.getHeight()/2,imageView.getHeight()*1.5f,0);
-            animator.setDuration(800);
-            animator1.setDuration(800);
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    imageView.setVisibility(View.VISIBLE);
-                }
+            try {
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    animator1.start();
-                }
-            });
+                Animator animator = ViewAnimationUtils.createCircularReveal(imageView,0,imageView.getWidth(),0,imageView.getHeight()*1.5f);
+                final Animator animator1 = ViewAnimationUtils.createCircularReveal(imageView,imageView.getWidth()/2,imageView.getHeight()/2,imageView.getHeight()*1.5f,0);
+                animator.setDuration(800);
+                animator1.setDuration(800);
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        imageView.setVisibility(View.VISIBLE);
+                    }
 
-            animator1.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                }
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        animator1.start();
+                    }
+                });
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    imageView.setVisibility(View.INVISIBLE);
-                    super.onAnimationEnd(animation);
-                    transicionToMenuActivity();
-                }
-            });
+                animator1.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                    }
 
-            animator.start();
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        imageView.setVisibility(View.INVISIBLE);
+                        super.onAnimationEnd(animation);
+
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        updateUI(currentUser);
+                    }
+                });
+
+                animator.start();
+
+
+            }catch (Exception e){
+
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        imageView.setVisibility(View.VISIBLE);
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        updateUI(currentUser);
+                    }
+                };
+                new Timer().schedule(timerTask,1000);
+
+            }
+
 
         }else {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     imageView.setVisibility(View.VISIBLE);
-                    transicionToMenuActivity();
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    updateUI(currentUser);
                 }
             };
             new Timer().schedule(timerTask,1000);
@@ -110,10 +136,27 @@ public class Splash extends AppCompatActivity {
 
     }
 
-    private void transicionToMenuActivity() {
-        Intent intent = new Intent(Splash.this,LoginActivity.class);
-        startActivity(intent);
-        finish();
+    private void inizialiteFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+
+    }
+
+    public void onStart() {
+        super.onStart();
+    }
+
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            Intent intent = new Intent(Splash.this,MenuActivity.class);
+            startActivity(intent);
+            finish();
+
+        } else {
+            Intent intent = new Intent(Splash.this,LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 

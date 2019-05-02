@@ -9,9 +9,11 @@ import com.casasolarctpi.appeenergia.fragments.ConsultasFragment;
 import com.casasolarctpi.appeenergia.fragments.ContactanosFragment;
 import com.casasolarctpi.appeenergia.fragments.IndexFragment;
 import com.casasolarctpi.appeenergia.fragments.PerfilFragment;
+import com.casasolarctpi.appeenergia.fragments.TiempoRealFragment;
 import com.casasolarctpi.appeenergia.models.ChildClass;
 import com.casasolarctpi.appeenergia.models.Constants;
 import com.casasolarctpi.appeenergia.models.ExpandableListAdapter;
+import com.casasolarctpi.appeenergia.models.UserData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,7 +21,16 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,7 +60,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private ChildClass[] listChildrenConsultas;
     public ConstraintLayout contentViewMenu, cLHome, cLSensor1, cLSensor2, cLSensor3, cLContactanos, cLPerfil, cLCerrarSesion;
     private  DrawerLayout drawer;
+    public static DatabaseReference reference;
     boolean bandera =true;
+    private FirebaseAuth mAuth;
+    public static UserData userData = new UserData();
     public static String userKey = " ";
 
     @Override
@@ -66,6 +80,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         inizialite();
+        inizialiteFirebaseApp();
+        usuarioIdentificado();
+
         inputListExpandable();
         createExpandableListView();
         if (bandera){
@@ -119,6 +136,42 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 setListViewHeight(parent,groupPosition);
                 return false;
+            }
+        });
+
+    }
+
+    private void inizialiteFirebaseApp(){
+        FirebaseApp.initializeApp(this);
+        try {FirebaseDatabase.getInstance().setPersistenceEnabled(false);}catch (Exception e){}
+        reference= FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+
+    }
+
+    private void usuarioIdentificado(){
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        DatabaseReference usuarios = reference.child("usuarios");
+        usuarios.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child: dataSnapshot.getChildren()){
+                    UserData tmpUserData =child.getValue(UserData.class);
+                    assert tmpUserData != null;
+                    assert currentUser != null;
+                    if (tmpUserData.getEmail().equals(currentUser.getEmail())){
+                        userData= tmpUserData;
+                        userKey = child.getKey();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
 
@@ -332,6 +385,23 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 txtTitle.setText(getResources().getString(R.string.inicio));
                 closeDrawer();
                 break;
+
+            case R.id.cLSensor1:
+                TiempoRealFragment.modoGraficar =0;
+                getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu,new TiempoRealFragment()).commit();
+                Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.tarjeta1));
+                txtTitle.setText(getResources().getString(R.string.tarjeta1));
+                try{
+                    //TiempoRealFragment.chartTR.clear();
+                    //TiempoRealFragment.clearEntries();
+                    //TiempoRealFragment.chartTR.setVisibility(View.INVISIBLE);
+
+                }catch (Exception ignored){
+
+                }
+                closeDrawer();
+                break;
+
             case R.id.cLContactanos:
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentViewMenu,new ContactanosFragment()).commit();
                 Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.contactanos));
