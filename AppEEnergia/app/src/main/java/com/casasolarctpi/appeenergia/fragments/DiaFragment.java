@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.casasolarctpi.appeenergia.R;
 import com.casasolarctpi.appeenergia.controllers.MenuActivity;
@@ -32,6 +33,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -92,9 +94,11 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         pbConsulta1 = view.findViewById(R.id.pbConsulta1);
 
         btnConsulta1.setOnClickListener(this);
+
         btnConsulta1.setEnabled(true);
         lineChartDia.setVisibility(INVISIBLE);
         pbConsulta1.setVisibility(INVISIBLE);
+
     }
 
     private void inizialiteValues() {
@@ -125,6 +129,12 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         }
     }
 
+    private void cleanListEntries(){
+        for (int i=0; i<entries.length;i++){
+            entries[i] = new ArrayList<>();
+        }
+    }
+
     //Método para mostrar el DatePicker del día.
     public void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -134,7 +144,6 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
     //Método para obtener los valores del día seleccionado.
     private void getDataDayOFFireBase(int year, int month, int dayOfMonth) {
-        final List<DatosCompletos>[] datosCompletos = new List[]{new ArrayList<>()};
 
         DatabaseReference dbR = datosDia.child("datos").child("y" + year).child("m" + month).child("d" + dayOfMonth);
         dbR.addValueEventListener(new ValueEventListener() {
@@ -162,56 +171,63 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         float[] todosLosDatos = new float[6];
         lineChartDia.clearAnimation();
         lineChartDia.clear();
-        for (int i = 0; i < datosCompletos.size(); i++) {
-            labelsChart.add(datosCompletos.get(i).getHora());
-            try {
+        cleanListEntries();
+        if (datosCompletos!=null) {
+            for (int i = 0; i < datosCompletos.size(); i++) {
+                labelsChart.add(datosCompletos.get(i).getHora());
+                try {
 
-                todosLosDatos[0] = Float.parseFloat(datosCompletos.get(i).getCorriente1());
-                todosLosDatos[1] = Float.parseFloat(datosCompletos.get(i).getCorriente2());
-                todosLosDatos[2] = Float.parseFloat(datosCompletos.get(i).getCorriente3());
-                todosLosDatos[3] = Float.parseFloat(datosCompletos.get(i).getPotencia1());
-                todosLosDatos[4] = Float.parseFloat(datosCompletos.get(i).getPotencia2());
-                todosLosDatos[5] = Float.parseFloat(datosCompletos.get(i).getPotencia3());
+                    todosLosDatos[0] = Float.parseFloat(datosCompletos.get(i).getCorriente1());
+                    todosLosDatos[1] = Float.parseFloat(datosCompletos.get(i).getCorriente2());
+                    todosLosDatos[2] = Float.parseFloat(datosCompletos.get(i).getCorriente3());
+                    todosLosDatos[3] = Float.parseFloat(datosCompletos.get(i).getPotencia1());
+                    todosLosDatos[4] = Float.parseFloat(datosCompletos.get(i).getPotencia2());
+                    todosLosDatos[5] = Float.parseFloat(datosCompletos.get(i).getPotencia3());
 
-                for (int j = 0; j < todosLosDatos.length; j++) {
-                    if (j < 3) {
-                        if (todosLosDatos[j] > valorMaximo1) {
-                            valorMaximo1 = todosLosDatos[j];
-                        }
+                    for (int j = 0; j < todosLosDatos.length; j++) {
+                        if (j < 3) {
+                            if (todosLosDatos[j] > valorMaximo1) {
+                                valorMaximo1 = todosLosDatos[j];
+                            }
 
-                        if (valorMinimo1 == 0) {
-                            valorMinimo1 = todosLosDatos[j];
-                        }
-                        if (todosLosDatos[j] < valorMinimo1) {
-                            valorMinimo1 = todosLosDatos[j];
-                        }
-                    } else {
+                            if (valorMinimo1 == 0) {
+                                valorMinimo1 = todosLosDatos[j];
+                            }
+                            if (todosLosDatos[j] < valorMinimo1) {
+                                valorMinimo1 = todosLosDatos[j];
+                            }
+                        } else {
 
-                        if (todosLosDatos[j] > valorMaximo2) {
-                            valorMaximo2 = todosLosDatos[j];
-                        }
+                            if (todosLosDatos[j] > valorMaximo2) {
+                                valorMaximo2 = todosLosDatos[j];
+                            }
 
-                        if (valorMinimo2 == 0) {
-                            valorMinimo2 = todosLosDatos[j];
-                        }
-                        if (todosLosDatos[j] < valorMinimo2) {
-                            valorMinimo2 = todosLosDatos[j];
+                            if (valorMinimo2 == 0) {
+                                valorMinimo2 = todosLosDatos[j];
+                            }
+                            if (todosLosDatos[j] < valorMinimo2) {
+                                valorMinimo2 = todosLosDatos[j];
+                            }
+
                         }
 
                     }
 
+                } catch (Exception e) {
+                    Log.e("Error en las entries", e.getMessage());
                 }
 
-            } catch (Exception e) {
-                Log.e("Error en las entries",e.getMessage());
+                for (int j = 0; j < todosLosDatos.length; j++) {
+                    entries[j].add(new Entry(i, todosLosDatos[j]));
+                }
+
+
+                todosLosDatos = new float[6];
             }
-
-            for (int j = 0; j < todosLosDatos.length; j++) {
-                entries[j].add(new Entry(i, todosLosDatos[j]));
-            }
-
-
-            todosLosDatos = new float[6];
+        }else {
+            pbConsulta1.setVisibility(INVISIBLE);
+            lineChartDia.setVisibility(View.INVISIBLE);
+            Snackbar.make(view,getString(R.string.no_hay_datos_dia_se),Snackbar.LENGTH_SHORT).show();
         }
 
 
@@ -275,8 +291,11 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
             lineChartDia.setTouchEnabled(true);
             lineChartDia.setVisibility(View.VISIBLE);
             lineChartDia.invalidate();
-            pbConsulta1.setVisibility(INVISIBLE);
+
+        }else {
+
         }
+        pbConsulta1.setVisibility(INVISIBLE);
         btnConsulta1.setEnabled(true);
 
     }
@@ -287,8 +306,8 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         switch (v.getId()){
             case R.id.btnConsulta1:
                 showDatePickerDialog();
-
                 break;
+
         }
 
     }

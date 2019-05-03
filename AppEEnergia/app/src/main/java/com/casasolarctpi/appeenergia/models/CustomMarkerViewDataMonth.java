@@ -17,8 +17,8 @@ public class CustomMarkerViewDataMonth extends MarkerView {
     private TextView txtCustomMarker1, txtCustomMarker2;
     private List<String> labelsChart;
 
-    private String dato1, dato2;
-    private int color1, color2;
+    private String[] datos;
+    private int [] colores;
 
     private MPPointF mOffset;
     private float sizeList;
@@ -40,13 +40,11 @@ public class CustomMarkerViewDataMonth extends MarkerView {
      * @param layoutResource the layout resource to use for the MarkerView
      */
 
-    public CustomMarkerViewDataMonth(Context context, int layoutResource, List<String> labelsChart, String dato1, String dato2, int color1, int color2) {
+    public CustomMarkerViewDataMonth(Context context, int layoutResource, List<String> labelsChart, String[] datos,int[] colores) {
         super(context, layoutResource);
         this.labelsChart = labelsChart;
-        this.dato1 = dato1;
-        this.dato2 = dato2;
-        this.color1 = color1;
-        this.color2 = color2;
+        this.datos = datos;
+        this.colores = colores;
         txtCustomMarker1 = findViewById(R.id.txtCustomMarker1);
         txtCustomMarker2 = findViewById(R.id.txtCustomMarker2);
     }
@@ -57,12 +55,36 @@ public class CustomMarkerViewDataMonth extends MarkerView {
         getX1=e.getX();
         switch (highlight.getDataSetIndex() ) {
             case 0:
-                txtCustomMarker1.setText(getResources().getString(R.string.dia) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(dato1 + ": " + e.getY());
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[0] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[0]));
                 break;
             case 1:
-                txtCustomMarker1.setText(getResources().getString(R.string.dia) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(dato2 + ": " + e.getY());
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[1] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[1]));
+                break;
+
+            case 2:
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[2] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[2]));
+                break;
+            case 3:
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[3] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[3]));
+                break;
+
+            case 4:
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[4] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[4]));
+                break;
+            case 5:
+                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[5] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[5]));
                 break;
         }
 

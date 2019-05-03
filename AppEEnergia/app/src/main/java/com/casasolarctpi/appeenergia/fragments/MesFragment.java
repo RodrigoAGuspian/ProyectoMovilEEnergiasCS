@@ -3,19 +3,73 @@ package com.casasolarctpi.appeenergia.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.casasolarctpi.appeenergia.R;
+import com.casasolarctpi.appeenergia.controllers.MenuActivity;
+import com.casasolarctpi.appeenergia.models.Constants;
+import com.casasolarctpi.appeenergia.models.CustomMarkerViewDataA;
+import com.casasolarctpi.appeenergia.models.CustomMarkerViewDataMonth;
+import com.casasolarctpi.appeenergia.models.DatosCompletos;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MesFragment extends Fragment {
+public class MesFragment extends Fragment implements OnClickListener {
+    TextView txtTituloChar;
+    ProgressBar pBMes;
+    MaterialSpinner mSMes;
+    NumberPicker nPAnio;
+    BarChart barChart2;
+    Button btnConsultaMes, btnCambio2;
+    View view;
+    int yearM, month,numDias;
+    List<DatosCompletos>[] datosCompletosMes = new List[31];
+    List<BarEntry>[] entriesBar = new List[6];
+    BarDataSet [] barDataSets = new BarDataSet[6];
+    List<IBarDataSet> dataBarSets = new ArrayList<>();
 
+    private DatabaseReference datosMes;
+    float yAxisMax1, yAxisMin1, yAxisMax2, yAxisMin2;
+    private boolean bandera = true;
 
     public MesFragment() {
         // Required empty public constructor
@@ -26,7 +80,452 @@ public class MesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mes, container, false);
+        view = inflater.inflate(R.layout.fragment_mes, container, false);
+        inizialite();
+        inizialiteValues();
+        inizialiteListEntries();
+        inputDataToSpinner();
+        return view;
     }
 
+    private void inizialite() {
+        txtTituloChar = view.findViewById(R.id.txtTituloChar);
+        pBMes = view.findViewById(R.id.pbMes);
+        nPAnio = view.findViewById(R.id.nPAnio);
+        barChart2 = view.findViewById(R.id.barChart2);
+        btnConsultaMes = view.findViewById(R.id.btnConsulta3);
+        btnCambio2 = view.findViewById(R.id.btnCambio2);
+        mSMes = view.findViewById(R.id.spinnerMes);
+        btnConsultaMes.setOnClickListener(this);
+        btnCambio2.setOnClickListener(this);
+
+        btnCambio2.setVisibility(INVISIBLE);
+        barChart2.setVisibility(INVISIBLE);
+        pBMes.setVisibility(INVISIBLE);
+
+    }
+
+
+    private void inizialiteValues() {
+        switch (ConsultasFragment.modoGraficar){
+            case 0:
+                datosMes = MenuActivity.reference.child("tarjeta1");
+                break;
+
+            case 1:
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                break;
+
+            case 4:
+                break;
+
+        }
+    }
+
+    private void inizialiteListEntries(){
+        for (int i=0; i<entriesBar.length;i++){
+            entriesBar[i] = new ArrayList<>();
+        }
+    }
+
+    //Métodd para ingresar valores al spinner de la vista de mes.
+    public void inputDataToSpinner() {
+        mSMes.setItems(Constants.MESES);
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        nPAnio.setMinValue(Constants.MIN_YEAR);
+        nPAnio.setMaxValue(Constants.MAX_YEAR);
+        nPAnio.setValue(year);
+
+
+    }
+
+    //Método para obtener el número de días de mes seleccionado en el MaterialSpinner
+    private void getDataMonth() {
+        pBMes.setVisibility(VISIBLE);
+        barChart2.setVisibility(INVISIBLE);
+        yearM = nPAnio.getValue();
+        month = mSMes.getSelectedIndex();
+        switch(month){
+            case 0:
+            case 2:
+            case 6:
+            case 7:
+            case 9:
+            case 11:
+                numDias=31;
+                break;
+            case 3:
+            case 5:
+            case 8:
+            case 10:
+                numDias=30;
+                break;
+            case 1:
+                if ( ((yearM%100 == 0) && (yearM%400 == 0)) ||
+                        ((yearM%100 != 0) && (yearM%  4 == 0))   )
+                    numDias=29;
+                else
+                    numDias=28;
+            default:
+        }
+
+        int realMonth= month+1;
+        datosCompletosMes = new List[numDias];
+
+
+        for (int i=0; i<numDias;i++){
+            getDataDayOFFireBaseDay(yearM,realMonth,i);
+
+        }
+
+    }
+
+    //Método para la obtención de datos del mes por día
+    private void getDataDayOFFireBaseDay(int yearM, int realMonth, final int i) {
+        final int dias = i+1;
+        DatabaseReference datosDia = datosMes.child("datos").child("y"+yearM).child("m"+realMonth).child("d"+dias);
+        datosDia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<ArrayList<DatosCompletos>> t = new GenericTypeIndicator<ArrayList<DatosCompletos>>() {};
+                try {
+
+                    datosCompletosMes[i] = dataSnapshot.getValue(t);
+                }catch (Exception ignored){
+
+                }
+                if (i==numDias-1){
+                    try {
+                        showChartMonth();
+
+                    }catch (Exception e){
+                        Log.e("Error Grafica",e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "No hay conexión a internet", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    //Método para graficar los datos del mes.
+    public void showChartMonth() {
+
+        barChart2.clearAnimation();
+        barChart2.clear();
+        List<String> labelC = new ArrayList<>();
+        XAxis xAxis1;
+        labelC.add(" ");
+        int j;
+        float tmpValue = 0;
+        for (int i = 0; i < datosCompletosMes.length; i++) {
+            for (j = 0; j < entriesBar.length; j++) {
+                tmpValue = promedioDia(datosCompletosMes[i], j);
+                entriesBar[j].add(new BarEntry(i, tmpValue));
+                if (j < 3) {
+                    if (tmpValue > yAxisMax1) {
+                        yAxisMax1 = tmpValue;
+                    }
+
+                    if (yAxisMin1 == 0) {
+                        yAxisMin1 = tmpValue;
+                    }
+                    if (tmpValue < yAxisMin1) {
+                        yAxisMin1 = tmpValue;
+                    }
+                } else {
+
+                    if (tmpValue > yAxisMax2) {
+                        yAxisMax2 = tmpValue;
+                    }
+
+                    if (yAxisMin2 == 0) {
+                        yAxisMin2 = tmpValue;
+                    }
+                    if (tmpValue < yAxisMin2) {
+                        yAxisMin2 = tmpValue;
+                    }
+
+                }
+                labelC.add(Integer.toString(i + 1));
+            }
+
+            if (j<=entriesBar.length){
+                YAxis yAxisLeft = barChart2.getAxisLeft();
+                YAxis yAxisRight = barChart2.getAxisRight();
+                yAxisLeft.setAxisMaximum(yAxisMax1);
+                yAxisLeft.setAxisMinimum(yAxisMin1);
+                yAxisRight.setAxisMaximum(yAxisMax2);
+                yAxisRight.setAxisMinimum(yAxisMin2);
+
+                barChart2.notifyDataSetChanged();
+                barChart2.invalidate();
+            }
+
+        }
+
+        loadDataBarSets();
+
+
+        if (entriesBar[0].size() != 0) {
+
+            txtTituloChar.setVisibility(VISIBLE);
+
+
+            Description description = new Description();
+            description.setText(" ");
+            xAxis1 = barChart2.getXAxis();
+            xAxis1.setCenterAxisLabels(true);
+            xAxis1.setLabelRotationAngle(-10f);
+            xAxis1.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis1.setValueFormatter(new IndexAxisValueFormatter(labelC));
+            xAxis1.setAxisMaximum(datosCompletosMes.length);
+            xAxis1.setLabelCount(2, true);
+
+            YAxis yAxisLeft = barChart2.getAxisLeft();
+            YAxis yAxisRight = barChart2.getAxisRight();
+            yAxisLeft.setAxisMaximum(yAxisMax1);
+            yAxisLeft.setAxisMinimum(yAxisMin1);
+            yAxisRight.setAxisMaximum(yAxisMax2);
+            yAxisRight.setAxisMinimum(yAxisMin2);
+            yAxisRight.setAxisMinimum(yAxisMin2);
+
+            barChart2.setDescription(description);
+            barChart2.groupBars(1, 0.04f, 0f);
+            barChart2.setTouchEnabled(true);
+            barChart2.setVisibility(VISIBLE);
+            barChart2.setMarker(new CustomMarkerViewDataMonth(getContext(), R.layout.item_custom_marker, labelC, Constants.tipoDeDato, Constants.coloresGrafica));
+            barChart2.highlightValue(null);
+            barChart2.invalidate();
+
+
+        } else {
+            Toast.makeText(getContext(), R.string.no_hay_datos, Toast.LENGTH_SHORT).show();
+        }
+        btnConsultaMes.setEnabled(true);
+        pBMes.setVisibility(View.INVISIBLE);
+
+        btnCambio2.setVisibility(VISIBLE);
+
+    }
+
+
+
+    private void loadDataBarSets() {
+        dataBarSets = new ArrayList<>();
+        final DecimalFormat decimalFormat = new DecimalFormat("####.##");
+        for (int i = 0; i < barDataSets.length; i++) {
+            barDataSets[i] = new BarDataSet(entriesBar[i], Constants.tipoDeDato1[i]);
+            barDataSets[i].setColor(getResources().getColor(Constants.coloresGrafica[i]));
+            barDataSets[i].setValueTextColor(getResources().getColor(Constants.coloresGrafica[i]));
+            Log.e("s", "color: " + getResources().getColor(Constants.coloresGrafica[i]));
+            if (i < 3) {
+                barDataSets[i].setAxisDependency(YAxis.AxisDependency.LEFT);
+            } else {
+                barDataSets[i].setAxisDependency(YAxis.AxisDependency.RIGHT);
+
+            }
+
+            barDataSets[i].setValueFormatter(new IValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    return decimalFormat.format(value);
+                }
+            });
+
+            if (bandera){
+                if (i<3) {
+                    dataBarSets.add(barDataSets[i]);
+                }
+
+            }else {
+                if (i>=3) {
+                    Log.e("asd",""+i);
+                    dataBarSets.add(barDataSets[i]);
+                }
+            }
+
+        }
+
+        if (bandera){
+            YAxis yAxisLeft = barChart2.getAxisLeft();
+            YAxis yAxisRight = barChart2.getAxisRight();
+            float tmpYAxisMax= (float) (yAxisMax1*1.014);
+
+            yAxisLeft.setAxisMaximum(tmpYAxisMax);
+            yAxisLeft.setAxisMinimum(yAxisMin1);
+            yAxisRight.setAxisMaximum(tmpYAxisMax);
+            yAxisRight.setAxisMinimum(yAxisMin1);
+
+        }else {
+            YAxis yAxisLeft = barChart2.getAxisLeft();
+            YAxis yAxisRight = barChart2.getAxisRight();
+            float tmpYAxisMax= (float) (yAxisMax2*1.014);
+            yAxisLeft.setAxisMaximum(tmpYAxisMax);
+            yAxisLeft.setAxisMinimum(yAxisMin2);
+            yAxisRight.setAxisMaximum(tmpYAxisMax);
+            yAxisRight.setAxisMinimum(yAxisMin2);
+        }
+
+        BarData data = new BarData(dataBarSets);
+        barChart2.clear();
+        barChart2.setData(data);
+        data.setBarWidth(0.3264f); // set custom bar width
+        barChart2.groupBars(0, 0.02f, 0f);
+
+    }
+
+    private void changeDataBar(){
+        bandera = !bandera;
+        loadDataBarSets();
+        barChart2.notifyDataSetChanged();
+        barChart2.invalidate();
+    }
+
+    //Método para promediar los datos del diá.
+    private float promedioDia(List<DatosCompletos> datosFiltrado, int modo) {
+        float acumulador=0;
+        switch (modo){
+            case 0:
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente1());
+
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+            case 1:
+
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente2());
+
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+            case 2:
+
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente3());
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+            case 3:
+
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia1());
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+
+            case 4:
+
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia2());
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+
+            case 5:
+
+                try {
+                    for (int i=0;i<datosFiltrado.size();i++){
+                        try {
+                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia3());
+                        }catch (Exception ignore){
+
+                        }
+                    }
+
+                }catch (Exception ignore){
+
+                }
+
+                break;
+
+        }
+
+        try {
+            Log.e("datos",Float.toString(acumulador));
+            return acumulador/datosFiltrado.size();
+
+        }catch (Exception ignore){
+            return 0f;
+
+        }
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnConsulta3:
+                getDataMonth();
+                break;
+            case R.id.btnCambio2:
+                changeDataBar();
+                break;
+        }
+    }
 }

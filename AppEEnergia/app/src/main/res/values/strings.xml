@@ -153,5 +153,9 @@
     <string name="fecha_datos_tomados">Fecha de los datos tomados</string>
     <string name="fecha">Fecha</string>
 
+    <string name="mensaje_week">Por favor seleccione un día (esta selección tomará toda la semana de dicho día)</string>
+    <string name="a">a</string>
+    <string name="no_hay_datos_dia_se">No hay datos disponibles para el dia seleccionado.</string>
+
 
 </resources>
