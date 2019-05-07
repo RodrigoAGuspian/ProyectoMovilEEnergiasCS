@@ -24,6 +24,7 @@ public class CustomMarkerViewDataMonth extends MarkerView {
     private float sizeList;
     private float getX1;
 
+    private boolean cambioDeDatos = true;
 
     public float getSizeList() {
         return sizeList;
@@ -31,6 +32,14 @@ public class CustomMarkerViewDataMonth extends MarkerView {
 
     public void setSizeList(float sizeList) {
         this.sizeList = sizeList;
+    }
+
+    public boolean getCambioDeDatos() {
+        return cambioDeDatos;
+    }
+
+    public void setCambioDeDatos(boolean cambioDeDatos) {
+        this.cambioDeDatos = cambioDeDatos;
     }
 
     /**
@@ -52,40 +61,33 @@ public class CustomMarkerViewDataMonth extends MarkerView {
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
         super.refreshContent(e, highlight);
-        getX1=e.getX();
+        getX1 = e.getX();
+        int [] numDatos = new int[3];
+        if (getCambioDeDatos()) {
+            numDatos = new int[]{0, 1, 2};
+        }else {
+            numDatos = new int[]{3, 4, 5};
+        }
         switch (highlight.getDataSetIndex() ) {
+
+
             case 0:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[0] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[0]));
+                txtCustomMarker1.setText(getResources().getString(R.string.dia) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[numDatos[0]] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[numDatos[0]]));
                 break;
             case 1:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[1] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[1]));
+                txtCustomMarker1.setText(getResources().getString(R.string.dia) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[numDatos[1]] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[numDatos[1]]));
                 break;
 
             case 2:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[2] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[2]));
-                break;
-            case 3:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[3] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[3]));
+                txtCustomMarker1.setText(getResources().getString(R.string.dia) + ": " + labelsChart.get((int) e.getX()));
+                txtCustomMarker2.setText(datos[numDatos[2]] + ": " + e.getY());
+                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[numDatos[2]]));
                 break;
 
-            case 4:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[4] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[4]));
-                break;
-            case 5:
-                txtCustomMarker1.setText(getResources().getString(R.string.hora) + ": " + labelsChart.get((int) e.getX()));
-                txtCustomMarker2.setText(datos[5] + ": " + e.getY());
-                txtCustomMarker2.setTextColor(getContext().getResources().getColor(colores[5]));
-                break;
         }
 
     }

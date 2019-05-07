@@ -46,6 +46,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -66,11 +68,11 @@ public class MesFragment extends Fragment implements OnClickListener {
     List<BarEntry>[] entriesBar = new List[6];
     BarDataSet [] barDataSets = new BarDataSet[6];
     List<IBarDataSet> dataBarSets = new ArrayList<>();
-
+    List<String> labelC = new ArrayList<>();
     private DatabaseReference datosMes;
     float yAxisMax1, yAxisMin1, yAxisMax2, yAxisMin2;
     private boolean bandera = true;
-
+    CustomMarkerViewDataMonth markerMonth;
     public MesFragment() {
         // Required empty public constructor
     }
@@ -182,9 +184,9 @@ public class MesFragment extends Fragment implements OnClickListener {
 
         for (int i=0; i<numDias;i++){
             getDataDayOFFireBaseDay(yearM,realMonth,i);
+            labelC.add(Integer.toString(i + 1));
 
         }
-
     }
 
     //Método para la obtención de datos del mes por día
@@ -225,9 +227,7 @@ public class MesFragment extends Fragment implements OnClickListener {
 
         barChart2.clearAnimation();
         barChart2.clear();
-        List<String> labelC = new ArrayList<>();
         XAxis xAxis1;
-        labelC.add(" ");
         int j;
         float tmpValue = 0;
         for (int i = 0; i < datosCompletosMes.length; i++) {
@@ -259,16 +259,10 @@ public class MesFragment extends Fragment implements OnClickListener {
                     }
 
                 }
-                labelC.add(Integer.toString(i + 1));
+
             }
 
             if (j<=entriesBar.length){
-                YAxis yAxisLeft = barChart2.getAxisLeft();
-                YAxis yAxisRight = barChart2.getAxisRight();
-                yAxisLeft.setAxisMaximum(yAxisMax1);
-                yAxisLeft.setAxisMinimum(yAxisMin1);
-                yAxisRight.setAxisMaximum(yAxisMax2);
-                yAxisRight.setAxisMinimum(yAxisMin2);
 
                 barChart2.notifyDataSetChanged();
                 barChart2.invalidate();
@@ -284,7 +278,7 @@ public class MesFragment extends Fragment implements OnClickListener {
             txtTituloChar.setVisibility(VISIBLE);
 
 
-            Description description = new Description();
+            final Description description = new Description();
             description.setText(" ");
             xAxis1 = barChart2.getXAxis();
             xAxis1.setCenterAxisLabels(true);
@@ -294,21 +288,15 @@ public class MesFragment extends Fragment implements OnClickListener {
             xAxis1.setAxisMaximum(datosCompletosMes.length);
             xAxis1.setLabelCount(2, true);
 
-            YAxis yAxisLeft = barChart2.getAxisLeft();
-            YAxis yAxisRight = barChart2.getAxisRight();
-            yAxisLeft.setAxisMaximum(yAxisMax1);
-            yAxisLeft.setAxisMinimum(yAxisMin1);
-            yAxisRight.setAxisMaximum(yAxisMax2);
-            yAxisRight.setAxisMinimum(yAxisMin2);
-            yAxisRight.setAxisMinimum(yAxisMin2);
 
             barChart2.setDescription(description);
-            barChart2.groupBars(1, 0.04f, 0f);
-            barChart2.setTouchEnabled(true);
-            barChart2.setVisibility(VISIBLE);
-            barChart2.setMarker(new CustomMarkerViewDataMonth(getContext(), R.layout.item_custom_marker, labelC, Constants.tipoDeDato, Constants.coloresGrafica));
+            markerMonth =new CustomMarkerViewDataMonth(getContext(), R.layout.item_custom_marker, labelC, Constants.tipoDeDato, Constants.coloresGrafica);
+            markerMonth.setCambioDeDatos(bandera);
+            barChart2.setMarker(markerMonth);
             barChart2.highlightValue(null);
-            barChart2.invalidate();
+
+
+            barChart2.setVisibility(VISIBLE);
 
 
         } else {
@@ -363,32 +351,34 @@ public class MesFragment extends Fragment implements OnClickListener {
             YAxis yAxisLeft = barChart2.getAxisLeft();
             YAxis yAxisRight = barChart2.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax1*1.014);
-
             yAxisLeft.setAxisMaximum(tmpYAxisMax);
-            yAxisLeft.setAxisMinimum(yAxisMin1);
+            yAxisLeft.setAxisMinimum(0);
             yAxisRight.setAxisMaximum(tmpYAxisMax);
-            yAxisRight.setAxisMinimum(yAxisMin1);
+            yAxisRight.setAxisMinimum(0);
 
         }else {
             YAxis yAxisLeft = barChart2.getAxisLeft();
             YAxis yAxisRight = barChart2.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax2*1.014);
             yAxisLeft.setAxisMaximum(tmpYAxisMax);
-            yAxisLeft.setAxisMinimum(yAxisMin2);
+            yAxisLeft.setAxisMinimum(0);
             yAxisRight.setAxisMaximum(tmpYAxisMax);
-            yAxisRight.setAxisMinimum(yAxisMin2);
+            yAxisRight.setAxisMinimum(0);
         }
 
+        barChart2.highlightValue(null);
         BarData data = new BarData(dataBarSets);
         barChart2.clear();
         barChart2.setData(data);
         data.setBarWidth(0.3264f); // set custom bar width
         barChart2.groupBars(0, 0.02f, 0f);
+        barChart2.invalidate();
 
     }
 
     private void changeDataBar(){
         bandera = !bandera;
+        markerMonth.setCambioDeDatos(bandera);
         loadDataBarSets();
         barChart2.notifyDataSetChanged();
         barChart2.invalidate();

@@ -298,9 +298,9 @@ public class SemanaFragment extends Fragment implements OnClickListener {
                 YAxis yAxisLeft = barChart1.getAxisLeft();
                 YAxis yAxisRight = barChart1.getAxisRight();
                 yAxisLeft.setAxisMaximum(yAxisMax1);
-                yAxisLeft.setAxisMinimum(yAxisMin1);
+                yAxisLeft.setAxisMinimum(0);
                 yAxisRight.setAxisMaximum(yAxisMax2);
-                yAxisRight.setAxisMinimum(yAxisMin2);
+                yAxisRight.setAxisMinimum(0);
 
                 barChart1.notifyDataSetChanged();
                 barChart1.invalidate();
