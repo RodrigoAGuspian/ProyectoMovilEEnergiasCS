@@ -550,7 +550,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
                 showDatePickerWeekDialog();
                 break;
 
-            case R.id.btnCambio2:
+            case R.id.btnCambio:
                 changeDataBar();
                 break;
         }

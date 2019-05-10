@@ -264,23 +264,20 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
             YAxis yAxisRight = chartTR.getAxisRight();
 
             if (valorMinimo1 > 10) {
-                valorMinimo1 -= 0.5f;
+                valorMinimo1= (float) (valorMinimo1*0.995);
             }
 
             if (valorMinimo2 > 10) {
-                valorMinimo2 -= 0.5f;
+                valorMinimo2= (float) (valorMinimo2*0.995);
             }
 
-            float tmpValorMaximo = (float) (valorMaximo1 + 0.1);
-            float tmpValorMaximo2 = (float) (valorMaximo2 + 0.1);
-            valorMaximo2 += 10;
-
-
-            yAxisLeft.setAxisMaximum(valorMaximo1 + 0.2f);
-            yAxisRight.setAxisMaximum(valorMaximo2 + 0.2f);
+            yAxisLeft.setAxisMaximum((float) (valorMaximo1*1.005));
+            yAxisRight.setAxisMaximum((float) (valorMaximo2*1.005));
             yAxisLeft.setAxisMinimum(valorMinimo1);
             yAxisRight.setAxisMinimum(valorMinimo2);
             valorMaximo1 = 0;
+            valorMaximo2 = 0;
+            valorMinimo1 = 0;
             valorMinimo2 = 0;
 
             chartTR.setDescription(description);
@@ -376,26 +373,36 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
             todosLosDatos = new float[6];
         }
 
-        if (entries[0].size()>0){
-            chartTR.notifyDataSetChanged();
-            chartTR.invalidate();
-            chartTR.setVisibility(View.VISIBLE);
-        }
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsChart));
 
         YAxis yAxisLeft = chartTR.getAxisLeft();
         YAxis yAxisRight = chartTR.getAxisRight();
 
-        valorMaximo1 += 0.1;
-        valorMaximo2 += 10;
 
+        if (valorMinimo1 > 10) {
+            valorMinimo1= (float) (valorMinimo1*0.995);
+        }
 
-        yAxisLeft.setAxisMaximum(valorMaximo1 + 0.2f);
-        yAxisRight.setAxisMaximum(valorMaximo2 + 0.2f);
+        if (valorMinimo2 > 10) {
+            valorMinimo2= (float) (valorMinimo2*0.995);
+        }
+
+        yAxisLeft.setAxisMaximum((float) (valorMaximo1*1.005));
+        yAxisRight.setAxisMaximum((float) (valorMaximo2*1.005));
         yAxisLeft.setAxisMinimum(valorMinimo1);
         yAxisRight.setAxisMinimum(valorMinimo2);
         valorMaximo1 = 0;
+        valorMaximo2 = 0;
+        valorMinimo1 = 0;
         valorMinimo2 = 0;
+
+
+        if (entries[0].size()>0){
+            chartTR.notifyDataSetChanged();
+            chartTR.invalidate();
+            chartTR.setVisibility(View.VISIBLE);
+        }
+
 
 
 

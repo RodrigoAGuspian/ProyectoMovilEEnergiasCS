@@ -35,6 +35,7 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -206,9 +207,13 @@ public class MesFragment extends Fragment implements OnClickListener {
                 if (i==numDias-1){
                     try {
                         showChartMonth();
+                        Snackbar.make(view,"No se puede cargar los datos",Snackbar.LENGTH_SHORT).show();
 
                     }catch (Exception e){
-                        Log.e("Error Grafica",e.getMessage());
+                        Toast.makeText(getContext(), R.string.no_hay_datos_disponibles, Toast.LENGTH_SHORT).show();
+                        btnConsultaMes.setEnabled(true);
+                        pBMes.setVisibility(View.INVISIBLE);
+                        btnCambio2.setVisibility(VISIBLE);
                     }
                 }
             }
@@ -294,8 +299,6 @@ public class MesFragment extends Fragment implements OnClickListener {
             markerMonth.setCambioDeDatos(bandera);
             barChart2.setMarker(markerMonth);
             barChart2.highlightValue(null);
-
-
             barChart2.setVisibility(VISIBLE);
 
 
@@ -345,6 +348,12 @@ public class MesFragment extends Fragment implements OnClickListener {
                 }
             }
 
+            if (i==barDataSets.length-1){
+                barChart2.notifyDataSetChanged();
+                barChart2.invalidate();
+
+            }
+
         }
 
         if (bandera){
@@ -372,7 +381,6 @@ public class MesFragment extends Fragment implements OnClickListener {
         barChart2.setData(data);
         data.setBarWidth(0.3264f); // set custom bar width
         barChart2.groupBars(0, 0.02f, 0f);
-        barChart2.invalidate();
 
     }
 
@@ -496,7 +504,8 @@ public class MesFragment extends Fragment implements OnClickListener {
         }
 
         try {
-            Log.e("datos",Float.toString(acumulador));
+            float tmp = acumulador/datosFiltrado.size();
+            Log.e("datos",Float.toString(tmp));
             return acumulador/datosFiltrado.size();
 
         }catch (Exception ignore){
