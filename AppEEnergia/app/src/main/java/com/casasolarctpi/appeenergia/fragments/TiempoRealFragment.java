@@ -255,7 +255,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
             data.setDrawValues(false);
             Description description = new Description();
             chartTR.setData(data);
-            description.setText(getString(R.string.fecha_datos_tomados) + " " + datosTiempoRealList.get(0).getFechaActual());
+            description.setText(" ");
             xAxis = chartTR.getXAxis();
             xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsChart));
             xAxis.setLabelRotationAngle(-10f);
@@ -271,7 +271,8 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
                 valorMinimo2 -= 0.5f;
             }
 
-            valorMaximo1 += 0.1;
+            float tmpValorMaximo = (float) (valorMaximo1 + 0.1);
+            float tmpValorMaximo2 = (float) (valorMaximo2 + 0.1);
             valorMaximo2 += 10;
 
 

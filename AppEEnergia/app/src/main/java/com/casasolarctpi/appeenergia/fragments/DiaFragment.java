@@ -171,6 +171,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         float[] todosLosDatos = new float[6];
         lineChartDia.clearAnimation();
         lineChartDia.clear();
+        dataSets.clear();
         cleanListEntries();
         if (datosCompletos!=null) {
             for (int i = 0; i < datosCompletos.size(); i++) {
