@@ -172,6 +172,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         lineChartDia.clearAnimation();
         lineChartDia.clear();
         cleanListEntries();
+        dataSets.clear();
         if (datosCompletos!=null) {
             for (int i = 0; i < datosCompletos.size(); i++) {
                 labelsChart.add(datosCompletos.get(i).getHora());
