@@ -56,7 +56,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
     //Declaración de variables
     private View view;
     private LineChart lineChartDia;
-    private Button btnConsulta1;
+    private Button btnConsulta1, btnCorriente, btnPotencia, btnTodo;
     private TextView txtConsulta1,txtTituloChart;
     public static List<String> labelsChart = new ArrayList<>();
     private DatabaseReference datosDia;
@@ -90,9 +90,18 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         lineChartDia = view.findViewById(R.id.lineChartDia);
         btnConsulta1 = view.findViewById(R.id.btnConsulta1);
         txtConsulta1 = view.findViewById(R.id.txtConsulta1);
-        txtTituloChart = view.findViewById(R.id.txtTituloChart);
+        btnCorriente= view.findViewById(R.id.btnCorriente2);
+        btnPotencia= view.findViewById(R.id.btnPotencias2);
+        btnTodo= view.findViewById(R.id.btnTodo2);
         pbConsulta1 = view.findViewById(R.id.pbConsulta1);
 
+        btnCorriente.setVisibility(INVISIBLE);
+        btnPotencia.setVisibility(INVISIBLE);
+        btnTodo.setVisibility(INVISIBLE);
+
+        btnCorriente.setOnClickListener(this);
+        btnPotencia.setOnClickListener(this);
+        btnTodo.setOnClickListener(this);
         btnConsulta1.setOnClickListener(this);
 
         btnConsulta1.setEnabled(true);
@@ -171,8 +180,13 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         float[] todosLosDatos = new float[6];
         lineChartDia.clearAnimation();
         lineChartDia.clear();
-        cleanListEntries();
+        labelsChart.clear();
         dataSets.clear();
+        cleanListEntries();
+        valorMaximo1=0;
+        valorMaximo2=0;
+        valorMinimo1=0;
+        valorMinimo2=0;
         if (datosCompletos!=null) {
             for (int i = 0; i < datosCompletos.size(); i++) {
                 labelsChart.add(datosCompletos.get(i).getHora());
@@ -265,22 +279,20 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
             YAxis yAxisRight = lineChartDia.getAxisRight();
 
             if (valorMinimo1 > 10) {
-                valorMinimo1 -= 1f;
+                valorMinimo1= (float) (valorMinimo1*0.995);
             }
 
             if (valorMinimo2 > 10) {
-                valorMinimo2 -= 1f;
+                valorMinimo2= (float) (valorMinimo2*0.995);
             }
 
-            valorMaximo1 += 0.1;
-            valorMaximo2 += 10;
-
-
-            yAxisLeft.setAxisMaximum(valorMaximo1 + 0.2f);
-            yAxisRight.setAxisMaximum(valorMaximo2 + 0.2f);
+            yAxisLeft.setAxisMaximum((float) (valorMaximo1*1.005));
+            yAxisRight.setAxisMaximum((float) (valorMaximo2*1.005));
             yAxisLeft.setAxisMinimum(valorMinimo1);
             yAxisRight.setAxisMinimum(valorMinimo2);
             valorMaximo1 = 0;
+            valorMaximo2 = 0;
+            valorMinimo1 = 0;
             valorMinimo2 = 0;
 
 
@@ -298,7 +310,9 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         }
         pbConsulta1.setVisibility(INVISIBLE);
         btnConsulta1.setEnabled(true);
-
+        btnCorriente.setVisibility(VISIBLE);
+        btnPotencia.setVisibility(VISIBLE);
+        btnTodo.setVisibility(VISIBLE);
     }
 
 
@@ -308,9 +322,61 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
             case R.id.btnConsulta1:
                 showDatePickerDialog();
                 break;
+            case R.id.btnCorriente2:
+                soloCorriente();
+                break;
+
+            case R.id.btnPotencias2:
+                soloPotencias();
+                break;
+
+            case R.id.btnTodo2:
+                habilitarTodo();
+                break;
 
         }
 
+    }
+
+
+    private void soloCorriente() {
+        for (int i=0; i<dataSets.size();i++){
+            if (i<3){
+                dataSets.get(i).setVisible(true);
+                dataSets.get(i).setHighlightEnabled(true);
+            }else {
+                dataSets.get(i).setVisible(false);
+                dataSets.get(i).setHighlightEnabled(false);
+            }
+        }
+
+        lineChartDia.notifyDataSetChanged();
+        lineChartDia.invalidate();
+    }
+
+    private void soloPotencias() {
+        for (int i=0; i<dataSets.size();i++){
+            if (i<3){
+                dataSets.get(i).setVisible(false);
+                dataSets.get(i).setHighlightEnabled(false);
+            }else {
+                dataSets.get(i).setVisible(true);
+                dataSets.get(i).setHighlightEnabled(true);
+            }
+        }
+
+        lineChartDia.notifyDataSetChanged();
+        lineChartDia.invalidate();
+    }
+
+    private void habilitarTodo() {
+        for (int i=0; i<dataSets.size();i++){
+            dataSets.get(i).setVisible(true);
+            dataSets.get(i).setHighlightEnabled(true);
+        }
+
+        lineChartDia.notifyDataSetChanged();
+        lineChartDia.invalidate();
     }
 
     @Override
