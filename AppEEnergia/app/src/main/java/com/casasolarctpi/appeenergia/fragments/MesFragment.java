@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.casasolarctpi.appeenergia.R;
 import com.casasolarctpi.appeenergia.controllers.MenuActivity;
 import com.casasolarctpi.appeenergia.models.Constants;
-import com.casasolarctpi.appeenergia.models.CustomMarkerViewDataA;
 import com.casasolarctpi.appeenergia.models.CustomMarkerViewDataMonth;
 import com.casasolarctpi.appeenergia.models.DatosCompletos;
 import com.github.mikephil.charting.charts.BarChart;
@@ -35,7 +34,6 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,8 +45,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Objects;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -65,7 +62,7 @@ public class MesFragment extends Fragment implements OnClickListener {
     Button btnConsultaMes, btnCambio2;
     View view;
     int yearM, month,numDias;
-    List<DatosCompletos>[] datosCompletosMes = new List[31];
+    List<DatosCompletos>[] datosCompletosMes = new List[32];
     List<BarEntry>[] entriesBar = new List[6];
     BarDataSet [] barDataSets = new BarDataSet[6];
     List<IBarDataSet> dataBarSets = new ArrayList<>();
@@ -158,6 +155,7 @@ public class MesFragment extends Fragment implements OnClickListener {
         switch(month){
             case 0:
             case 2:
+            case 4:
             case 6:
             case 7:
             case 9:
@@ -178,61 +176,59 @@ public class MesFragment extends Fragment implements OnClickListener {
                     numDias=28;
             default:
         }
-
-        int realMonth= month+1;
         datosCompletosMes = new List[numDias];
 
 
-        for (int i=0; i<numDias;i++){
+        for (int i=0; i<numDias+1;i++){
             //getDataDayOFFireBaseDay(yearM,realMonth,i);
-            labelC.add(Integer.toString(i + 1));
-            if (i+1==numDias){
-                Log.e("asd","+"+numDias);
-            }
+            labelC.add(i,Integer.toString(i + 1));
 
         }
+        getDataToFirebaseForMonth(yearM,month+1);
+
     }
 
-    //Método para la obtención de datos del mes por día
-    private void getDataDayOFFireBaseDay(int yearM, int realMonth, final int i) {
-        final int dias = i+1;
-        DatabaseReference datosDia = datosMes.child("datos").child("y"+yearM).child("m"+realMonth).child("d"+dias);
-        datosDia.addValueEventListener(new ValueEventListener() {
+    //Método para la obtención de datos del mes
+    private void getDataToFirebaseForMonth(int year, int month){
+        DatabaseReference dbrMonth = datosMes.child("datos").child("y"+year).child("m"+month);
+        dbrMonth.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<DatosCompletos>> t = new GenericTypeIndicator<ArrayList<DatosCompletos>>() {};
-                try {
-
-                    datosCompletosMes[i] = dataSnapshot.getValue(t);
-                }catch (Exception ignored){
-
-                }
-                if (dias==numDias){
+                int tmpIndex;
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     try {
-                        showChartMonth();
-                        Log.e("Pasa dato","!"+dias);
-
+                        tmpIndex = Integer.parseInt(Objects.requireNonNull(postSnapshot.getKey()).substring(1));
+                        Log.e("asd",""+tmpIndex);
+                        GenericTypeIndicator<ArrayList<DatosCompletos>> t = new GenericTypeIndicator<ArrayList<DatosCompletos>>() {};
+                        datosCompletosMes[tmpIndex-1] = postSnapshot.getValue(t);
                     }catch (Exception e){
-                        Toast.makeText(getContext(), R.string.no_hay_datos_disponibles, Toast.LENGTH_SHORT).show();
-                        btnConsultaMes.setEnabled(true);
-                        pBMes.setVisibility(View.INVISIBLE);
-                        btnCambio2.setVisibility(VISIBLE);
+                        Log.e("Error consulta mes", e.getMessage());
                     }
+
                 }
+                try {
+                    showChartMonth();
+                    Log.e("Pasa dato","!");
+
+                }catch (Exception e){
+                    Toast.makeText(getContext(), R.string.no_hay_datos_disponibles, Toast.LENGTH_SHORT).show();
+                    btnConsultaMes.setEnabled(true);
+                    pBMes.setVisibility(View.INVISIBLE);
+                    btnCambio2.setVisibility(VISIBLE);
+                }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "No hay conexión a internet", Toast.LENGTH_SHORT).show();
+
             }
         });
-
-
     }
 
     //Método para graficar los datos del mes.
     public void showChartMonth() {
-
+        inizialiteListEntries();
         barChart2.clearAnimation();
         barChart2.clear();
         XAxis xAxis1;
