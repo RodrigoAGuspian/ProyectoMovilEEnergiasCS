@@ -140,11 +140,11 @@
 
     <string name="potencia1">Pontencia 1 (W)</string>
     <string name="potencia2">Pontencia 2 (W)</string>
-    <string name="potencia3">Pontencia 3 (W)</string>
+    <strinag name="potencia3">Pontencia 3 (W)</strinag>
 
-    <string name="c1">C1 (A)</string>
-    <string name="c2">C2 (A)</string>
-    <string name="c3">C3 (A)</string>
+    <string name="c1">I1 (A)</string>
+    <string name="c2">I2 (A)</string>
+    <string name="c3">I3 (A)</string>
 
     <string name="p1">P1 (W)</string>
     <string name="p2">P2 (W)</string>
@@ -157,6 +157,9 @@
     <string name="a">a</string>
     <string name="no_hay_datos_dia_se">No hay datos disponibles para el dia seleccionado.</string>
     <string name="no_hay_datos_disponibles">No hay datos disponibles en este momento</string>
+    <string name="potencia_vs_tiempo">Potencia (W) vs Tiempo</string>
+    <string name="corriente_vs_tiempo">Corriente (A) vs Tiempo</string>
+    <string name="potencia_corriente_vs_tiempo">Potencia(W), Corriente(A) vs Tiempo</string>
 
 
 </resources>

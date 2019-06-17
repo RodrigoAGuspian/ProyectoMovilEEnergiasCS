@@ -70,6 +70,7 @@ public class MesFragment extends Fragment implements OnClickListener {
     private DatabaseReference datosMes;
     float yAxisMax1, yAxisMin1, yAxisMax2, yAxisMin2;
     private boolean bandera = true;
+    public static String titleData;
     CustomMarkerViewDataMonth markerMonth;
     public MesFragment() {
         // Required empty public constructor
@@ -102,6 +103,7 @@ public class MesFragment extends Fragment implements OnClickListener {
         btnCambio2.setVisibility(INVISIBLE);
         barChart2.setVisibility(INVISIBLE);
         pBMes.setVisibility(INVISIBLE);
+        txtTituloChar.setVisibility(INVISIBLE);
 
     }
 
@@ -233,7 +235,7 @@ public class MesFragment extends Fragment implements OnClickListener {
         barChart2.clear();
         XAxis xAxis1;
         int j;
-        float tmpValue = 0;
+        float tmpValue;
         for (int i = 0; i < datosCompletosMes.length; i++) {
             for (j = 0; j < entriesBar.length; j++) {
                 tmpValue = promedioDia(datosCompletosMes[i], j);
@@ -288,7 +290,7 @@ public class MesFragment extends Fragment implements OnClickListener {
 
             txtTituloChar.setVisibility(VISIBLE);
 
-
+            txtTituloChar.setText(titleData);
             final Description description = new Description();
             description.setText(" ");
             xAxis1 = barChart2.getXAxis();
@@ -310,6 +312,7 @@ public class MesFragment extends Fragment implements OnClickListener {
 
         } else {
             Toast.makeText(getContext(), R.string.no_hay_datos, Toast.LENGTH_SHORT).show();
+            txtTituloChar.setVisibility(INVISIBLE);
         }
         btnConsultaMes.setEnabled(true);
         pBMes.setVisibility(View.INVISIBLE);
@@ -394,6 +397,7 @@ public class MesFragment extends Fragment implements OnClickListener {
         bandera = !bandera;
         markerMonth.setCambioDeDatos(bandera);
         loadDataBarSets();
+        txtTituloChar.setText(titleData);
         barChart2.notifyDataSetChanged();
         barChart2.invalidate();
     }

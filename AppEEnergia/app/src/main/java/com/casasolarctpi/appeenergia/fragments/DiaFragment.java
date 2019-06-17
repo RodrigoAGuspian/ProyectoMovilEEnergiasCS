@@ -339,21 +339,6 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
     }
 
 
-    private void soloCorriente() {
-        for (int i=0; i<dataSets.size();i++){
-            if (i<3){
-                dataSets.get(i).setVisible(true);
-                dataSets.get(i).setHighlightEnabled(true);
-            }else {
-                dataSets.get(i).setVisible(false);
-                dataSets.get(i).setHighlightEnabled(false);
-            }
-        }
-
-        lineChartDia.notifyDataSetChanged();
-        lineChartDia.invalidate();
-    }
-
     private void soloPotencias() {
         for (int i=0; i<dataSets.size();i++){
             if (i<3){
@@ -367,6 +352,23 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         lineChartDia.notifyDataSetChanged();
         lineChartDia.invalidate();
+        txtConsulta1.setText(getString(R.string.potencia_vs_tiempo));
+    }
+
+    private void soloCorriente() {
+        for (int i=0; i<dataSets.size();i++){
+            if (i<3){
+                dataSets.get(i).setVisible(true);
+                dataSets.get(i).setHighlightEnabled(true);
+            }else {
+                dataSets.get(i).setVisible(false);
+                dataSets.get(i).setHighlightEnabled(false);
+            }
+        }
+
+        lineChartDia.notifyDataSetChanged();
+        lineChartDia.invalidate();
+        txtConsulta1.setText(getString(R.string.corriente_vs_tiempo));
     }
 
     private void habilitarTodo() {
@@ -377,6 +379,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         lineChartDia.notifyDataSetChanged();
         lineChartDia.invalidate();
+        txtConsulta1.setText(getString(R.string.potencia_corriente_vs_tiempo));
     }
 
     @Override

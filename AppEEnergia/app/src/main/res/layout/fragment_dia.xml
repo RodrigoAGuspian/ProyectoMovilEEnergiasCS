@@ -7,40 +7,45 @@
     tools:context=".fragments.DiaFragment">
 
 
-    <Button
-        android:id="@+id/btnCorriente2"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/colorCorriente1"
-        android:text="@string/corrientes"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/btnTodo2"
-        app:layout_constraintStart_toEndOf="@+id/btnPotencias2"
-        app:layout_constraintTop_toBottomOf="@+id/btnConsulta1" />
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/btnConsulta1"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="16dp">
 
-    <Button
-        android:id="@+id/btnPotencias2"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="32dp"
-        android:backgroundTint="@color/colorPotencia1"
-        android:text="@string/potencias"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnConsulta1" />
+        <Button
+            android:id="@+id/btnCorriente2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorCorriente1"
+            android:layout_marginStart="2dp"
+            android:text="@string/corrientes"
+            android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btnTodo2"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/colorAccent"
-        android:text="@string/todo"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnConsulta1" />
+
+        <Button
+            android:id="@+id/btnPotencias2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPotencia1"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/potencias"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnTodo2"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_marginEnd="2dp"
+            android:text="@string/todo"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChartDia"
@@ -53,8 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCorriente2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
     <TextView
         android:id="@+id/txtConsulta1"

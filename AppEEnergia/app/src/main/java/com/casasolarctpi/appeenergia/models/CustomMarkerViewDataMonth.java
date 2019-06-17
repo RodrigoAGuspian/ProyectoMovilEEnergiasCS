@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.casasolarctpi.appeenergia.R;
+import com.casasolarctpi.appeenergia.fragments.MesFragment;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -64,8 +65,10 @@ public class CustomMarkerViewDataMonth extends MarkerView {
         getX1 = e.getX();
         int [] numDatos = new int[3];
         if (getCambioDeDatos()) {
+            MesFragment.titleData = getContext().getResources().getString(R.string.potencia_vs_tiempo);
             numDatos = new int[]{0, 1, 2};
         }else {
+            MesFragment.titleData = getContext().getResources().getString(R.string.corriente_vs_tiempo);
             numDatos = new int[]{3, 4, 5};
         }
         switch (highlight.getDataSetIndex() ) {

@@ -72,7 +72,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
     private XAxis xAxis;
     float yAxisMax1, yAxisMin1, yAxisMax2, yAxisMin2;
     private boolean bandera = true;
-
+    public static String titleData;
     public SemanaFragment() {
         // Required empty public constructor
     }
@@ -261,7 +261,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         clearEntries();
         dataBarSets = new ArrayList<>();
         float tmpValue;
-        int j=0;
+        int j;
         for (int i=0; i<7;i++){
 
             for (j=0;j<entriesBarWeek.length;j++){
@@ -372,7 +372,6 @@ public class SemanaFragment extends Fragment implements OnClickListener {
 
             }else {
                 if (i>=3) {
-                    Log.e("asd",""+i);
                     dataBarSets.add(barDataSets[i]);
                 }
             }
@@ -380,6 +379,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         }
 
         if (bandera){
+            titleData = getString(R.string.potencia_vs_tiempo);
             YAxis yAxisLeft = barChart1.getAxisLeft();
             YAxis yAxisRight = barChart1.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax1*1.014);
@@ -390,6 +390,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
             yAxisRight.setAxisMinimum(yAxisMin1);
 
         }else {
+            titleData = getString(R.string.corriente_vs_tiempo);
             YAxis yAxisLeft = barChart1.getAxisLeft();
             YAxis yAxisRight = barChart1.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax2*1.014);
