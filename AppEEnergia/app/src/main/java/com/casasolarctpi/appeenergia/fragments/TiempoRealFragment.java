@@ -93,7 +93,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
         btnCorriente.setOnClickListener(this);
         btnPotencia.setOnClickListener(this);
         btnTodo.setOnClickListener(this);
-
+        txtChart.setText(getString(R.string.potencia_corriente_vs_tiempo));
     }
 
     //Método que define que valores se van a graficar
@@ -102,6 +102,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
         switch (modoGraficar){
             case 0:
                 datosTiempoReal = FirebaseDatabase.getInstance().getReference().child("tarjeta1").child("tiempoReal");
+
                 break;
 
             case 1:
@@ -443,7 +444,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
                 dataSets.get(i).setHighlightEnabled(false);
             }
         }
-
+        txtChart.setText(getString(R.string.corriente_vs_tiempo));
         chartTR.notifyDataSetChanged();
         chartTR.invalidate();
     }
@@ -458,7 +459,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
                 dataSets.get(i).setHighlightEnabled(true);
             }
         }
-
+        txtChart.setText(getString(R.string.potencias_tiempo));
         chartTR.notifyDataSetChanged();
         chartTR.invalidate();
     }
@@ -468,7 +469,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
             dataSets.get(i).setVisible(true);
             dataSets.get(i).setHighlightEnabled(true);
         }
-
+        txtChart.setText(getString(R.string.potencia_corriente_vs_tiempo));
         chartTR.notifyDataSetChanged();
         chartTR.invalidate();
     }

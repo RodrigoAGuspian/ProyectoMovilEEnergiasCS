@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.casasolarctpi.appeenergia.R;
 import com.casasolarctpi.appeenergia.controllers.MenuActivity;
 import com.casasolarctpi.appeenergia.models.Constants;
+import com.casasolarctpi.appeenergia.models.DataAverage;
 import com.casasolarctpi.appeenergia.models.DatosCompletos;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -45,6 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -260,12 +262,32 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         barChart1.clear();
         clearEntries();
         dataBarSets = new ArrayList<>();
-        float tmpValue;
+        float tmpValue=0;
         int j;
         for (int i=0; i<7;i++){
-
+            DataAverage tmpDataAverage = promedioDia(datosCompletosSemana[i]);
             for (j=0;j<entriesBarWeek.length;j++){
-                tmpValue =promedioDia(datosCompletosSemana[i],j);
+                switch (j){
+                    case 0:
+                        tmpValue = tmpDataAverage.getCorrientePromedio1();
+                        break;
+                    case 1:
+                        tmpValue = tmpDataAverage.getCorrientePromedio2();
+                        break;
+                    case 2:
+                        tmpValue = tmpDataAverage.getCorrientePromedio3();
+                        break;
+                    case 3:
+                        tmpValue = tmpDataAverage.getPotenciaPromedio1();
+                        break;
+                    case 4:
+                        tmpValue = tmpDataAverage.getPotenciaPromedio2();
+                        break;
+                    case 5:
+                        tmpValue = tmpDataAverage.getPotenciaPromedio3();
+                        break;
+
+                }
                 entriesBarWeek[j].add(new BarEntry(i,tmpValue));
                 if (j < 3) {
                     if (tmpValue > yAxisMax1) {
@@ -329,9 +351,6 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         xAxis.setLabelRotationAngle(-5f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAxisMaximum(7);
-
-
-
 
         barChart1.setVisibility(VISIBLE);
         barChart1.setDescription(description);
@@ -421,125 +440,73 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         }
     }
 
+
     //Método para promediar los datos del diá.
-    private float promedioDia(List<DatosCompletos> datosFiltrado, int modo) {
-        float acumulador=0;
-        switch (modo){
-            case 0:
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente1());
+    private DataAverage promedioDia(List<DatosCompletos> datosFiltrado) {
+        DataAverage acumulador= new DataAverage();
+        int  acmH = 0;
 
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-            case 1:
-
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente2());
-
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-            case 2:
-
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getCorriente3());
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-            case 3:
-
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia1());
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-
-            case 4:
-
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia2());
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-
-            case 5:
-
-                try {
-                    for (int i=0;i<datosFiltrado.size();i++){
-                        try {
-                            acumulador+=Float.parseFloat(datosFiltrado.get(i).getPotencia3());
-                        }catch (Exception ignore){
-
-                        }
-                    }
-
-                }catch (Exception ignore){
-
-                }
-
-                break;
-
-        }
-
+        List<DataAverage> irradianciaPorHoras = new ArrayList<>(1);
         try {
-            Log.e("datos",Float.toString(acumulador));
-            return acumulador/datosFiltrado.size();
+            for (int i =0 ; i<datosFiltrado.size(); i++){
+                DatosCompletos el1 = datosFiltrado.get(i);
+                try {
+                    acumulador.setPotenciaPromedio1(acumulador.getPotenciaPromedio1() +Float.parseFloat(el1.getPotencia1()));
+                    acumulador.setPotenciaPromedio2(acumulador.getPotenciaPromedio2() +Float.parseFloat(el1.getPotencia2()));
+                    acumulador.setPotenciaPromedio3(acumulador.getPotenciaPromedio3() +Float.parseFloat(el1.getPotencia3()));
+
+                    acumulador.setCorrientePromedio1(acumulador.getCorrientePromedio1() +Float.parseFloat(el1.getCorriente1()));
+                    acumulador.setCorrientePromedio2(acumulador.getCorrientePromedio2() +Float.parseFloat(el1.getCorriente2()));
+                    acumulador.setCorrientePromedio3(acumulador.getCorrientePromedio3() +Float.parseFloat(el1.getCorriente3()));
+                }catch (Exception ignore1) {
+
+                }
+                try {
+                    Date horaDato;
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+                    horaDato = timeFormat.parse(el1.getHora());
+                    if (acmH == 0){
+                        acmH = horaDato.getHours();
+                    }
+                    if (horaDato.getHours() == acmH){
+                        acumulador.setPotenciaPromedio1(Math.round(acumulador.getPotenciaPromedio1() * 1000)/1000);
+                        acumulador.setPotenciaPromedio2(Math.round(acumulador.getPotenciaPromedio2() * 1000)/1000);
+                        acumulador.setPotenciaPromedio3(Math.round(acumulador.getPotenciaPromedio3() * 1000)/1000);
+
+                        acumulador.setCorrientePromedio1(Math.round(acumulador.getCorrientePromedio1() * 1000)/1000);
+                        acumulador.setCorrientePromedio2(Math.round(acumulador.getCorrientePromedio2() * 1000)/1000);
+                        acumulador.setCorrientePromedio3(Math.round(acumulador.getCorrientePromedio3() * 1000)/1000);
+                        irradianciaPorHoras.add(acumulador);
+                        acmH++;
+                    } else {
+                        if (horaDato.getHours() - 1 > acmH || acmH ==0){
+                            acmH = horaDato.getHours() + 1;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e("error",e.getMessage()+ " "+ el1.getHora());
+
+                }
+
+            }
+
+            for ( DataAverage element : irradianciaPorHoras ) {
+
+                acumulador.setPotenciaPromedio1(element.getPotenciaPromedio1() + acumulador.getPotenciaPromedio1());
+                acumulador.setPotenciaPromedio2(element.getPotenciaPromedio2() + acumulador.getPotenciaPromedio2());
+                acumulador.setPotenciaPromedio3(element.getPotenciaPromedio3() + acumulador.getPotenciaPromedio3());
+                acumulador.setCorrientePromedio1(element.getCorrientePromedio1() + acumulador.getCorrientePromedio1());
+                acumulador.setCorrientePromedio2(element.getCorrientePromedio2() + acumulador.getCorrientePromedio2());
+                acumulador.setCorrientePromedio3(element.getCorrientePromedio3() + acumulador.getCorrientePromedio3());
+
+            }
+
 
         }catch (Exception ignore){
-            return 0f;
 
-        }
+    }
+        return acumulador;
 
     }
 
