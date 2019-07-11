@@ -11,17 +11,18 @@
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btnConsulta1"
+        android:layout_marginTop="8dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/txtConsulta1"
         tools:layout_editor_absoluteX="16dp">
 
         <Button
             android:id="@+id/btnCorriente2"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:backgroundTint="@color/colorCorriente1"
             android:layout_marginStart="2dp"
+            android:backgroundTint="@color/colorCorriente1"
             android:text="@string/corrientes"
             android:textColor="@color/white" />
 
@@ -30,9 +31,9 @@
             android:id="@+id/btnPotencias2"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:backgroundTint="@color/colorPotencia1"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/colorPotencia1"
             android:text="@string/potencias"
             android:textColor="@color/white" />
 
@@ -40,8 +41,8 @@
             android:id="@+id/btnTodo2"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:backgroundTint="@color/colorAccent"
             android:layout_marginEnd="2dp"
+            android:backgroundTint="@color/colorAzul"
             android:text="@string/todo"
             android:textColor="@color/white" />
 
@@ -51,21 +52,20 @@
         android:id="@+id/lineChartDia"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTituloChart1" />
 
     <TextView
         android:id="@+id/txtConsulta1"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
         android:textColor="@color/colorMenu"
@@ -97,6 +97,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTituloChart1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/colorMenu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

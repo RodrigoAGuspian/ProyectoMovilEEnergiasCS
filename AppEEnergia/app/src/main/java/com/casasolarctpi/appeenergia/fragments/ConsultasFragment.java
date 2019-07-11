@@ -46,14 +46,10 @@ public class ConsultasFragment extends Fragment {
         adapter.addFrag(new MesFragment(), getString(R.string.mes));
 
         mViewPager.setAdapter(adapter);
-        mViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
 
         tabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager.beginFakeDrag();
 
 
         return view;

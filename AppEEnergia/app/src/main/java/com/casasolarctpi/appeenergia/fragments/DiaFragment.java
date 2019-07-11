@@ -94,7 +94,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         btnPotencia= view.findViewById(R.id.btnPotencias2);
         btnTodo= view.findViewById(R.id.btnTodo2);
         pbConsulta1 = view.findViewById(R.id.pbConsulta1);
-
+        txtTituloChart = view.findViewById(R.id.txtTituloChart1);
         btnCorriente.setVisibility(INVISIBLE);
         btnPotencia.setVisibility(INVISIBLE);
         btnTodo.setVisibility(INVISIBLE);
@@ -107,7 +107,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
         btnConsulta1.setEnabled(true);
         lineChartDia.setVisibility(INVISIBLE);
         pbConsulta1.setVisibility(INVISIBLE);
-
+        txtTituloChart.setVisibility(INVISIBLE);
     }
 
     private void inizialiteValues() {
@@ -248,7 +248,9 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         if (entries[0].size() > 0) {
 
-
+            txtTituloChart.setVisibility(VISIBLE);
+            txtConsulta1.setVisibility(VISIBLE);
+            txtTituloChart.setText(getString(R.string.potencia_corriente_vs_tiempo));
             for (int i = 0; i < lineDataSets.length; i++) {
                 lineDataSets[i] = new LineDataSet(entries[i], Constants.tipoDeDato1[i]);
                 lineDataSets[i].setColor(getResources().getColor(Constants.coloresGrafica[i]));
@@ -352,7 +354,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         lineChartDia.notifyDataSetChanged();
         lineChartDia.invalidate();
-        txtConsulta1.setText(getString(R.string.potencia_vs_tiempo));
+        txtTituloChart.setText(getString(R.string.potencia_vs_tiempo));
     }
 
     private void soloCorriente() {
@@ -368,7 +370,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         lineChartDia.notifyDataSetChanged();
         lineChartDia.invalidate();
-        txtConsulta1.setText(getString(R.string.corriente_vs_tiempo));
+        txtTituloChart.setText(getString(R.string.corriente_vs_tiempo));
     }
 
     private void habilitarTodo() {
@@ -379,7 +381,7 @@ public class DiaFragment extends Fragment implements OnClickListener , OnDateSet
 
         lineChartDia.notifyDataSetChanged();
         lineChartDia.invalidate();
-        txtConsulta1.setText(getString(R.string.potencia_corriente_vs_tiempo));
+        txtTituloChart.setText(getString(R.string.potencia_corriente_vs_tiempo));
     }
 
     @Override

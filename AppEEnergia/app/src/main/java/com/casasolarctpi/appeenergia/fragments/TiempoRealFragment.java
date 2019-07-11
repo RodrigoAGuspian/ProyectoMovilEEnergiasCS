@@ -404,9 +404,6 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
             chartTR.setVisibility(View.VISIBLE);
         }
 
-
-
-
     }
 
     public static void clearEntries(){
@@ -459,7 +456,7 @@ public class TiempoRealFragment extends Fragment implements OnClickListener {
                 dataSets.get(i).setHighlightEnabled(true);
             }
         }
-        txtChart.setText(getString(R.string.potencias_tiempo));
+        txtChart.setText(getString(R.string.potencia_vs_tiempo));
         chartTR.notifyDataSetChanged();
         chartTR.invalidate();
     }

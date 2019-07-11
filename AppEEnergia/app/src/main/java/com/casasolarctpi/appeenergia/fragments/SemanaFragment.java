@@ -74,7 +74,6 @@ public class SemanaFragment extends Fragment implements OnClickListener {
     private XAxis xAxis;
     float yAxisMax1, yAxisMin1, yAxisMax2, yAxisMin2;
     private boolean bandera = true;
-    public static String titleData;
     public SemanaFragment() {
         // Required empty public constructor
     }
@@ -189,7 +188,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
                 Date primerDia = calendar.getTime();
                 Date ultimoDia = calendar1.getTime();
 
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
 
                 txtDate2.setText(getString(R.string.fecha)+": "+format.format(primerDia)+" "+getResources().getString(R.string.a)+" "+format.format(ultimoDia));
 
@@ -337,6 +336,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
 
         if(entriesBarWeek[0].size()>0){
             txtTituloGrafica2.setVisibility(VISIBLE);
+
         }
 
         loadDataBarSets();
@@ -398,7 +398,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
         }
 
         if (bandera){
-            titleData = getString(R.string.potencia_vs_tiempo);
+            txtTituloGrafica2.setText(getString(R.string.corriente_vs_tiempo));
             YAxis yAxisLeft = barChart1.getAxisLeft();
             YAxis yAxisRight = barChart1.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax1*1.014);
@@ -409,7 +409,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
             yAxisRight.setAxisMinimum(yAxisMin1);
 
         }else {
-            titleData = getString(R.string.corriente_vs_tiempo);
+            txtTituloGrafica2.setText(getString(R.string.potencia_vs_tiempo));
             YAxis yAxisLeft = barChart1.getAxisLeft();
             YAxis yAxisRight = barChart1.getAxisRight();
             float tmpYAxisMax= (float) (yAxisMax2*1.014);
@@ -445,7 +445,7 @@ public class SemanaFragment extends Fragment implements OnClickListener {
     private DataAverage promedioDia(List<DatosCompletos> datosFiltrado) {
         DataAverage acumulador= new DataAverage();
         int  acmH = 0;
-
+        int contador = 0;
         List<DataAverage> irradianciaPorHoras = new ArrayList<>(1);
         try {
             for (int i =0 ; i<datosFiltrado.size(); i++){
@@ -454,10 +454,10 @@ public class SemanaFragment extends Fragment implements OnClickListener {
                     acumulador.setPotenciaPromedio1(acumulador.getPotenciaPromedio1() +Float.parseFloat(el1.getPotencia1()));
                     acumulador.setPotenciaPromedio2(acumulador.getPotenciaPromedio2() +Float.parseFloat(el1.getPotencia2()));
                     acumulador.setPotenciaPromedio3(acumulador.getPotenciaPromedio3() +Float.parseFloat(el1.getPotencia3()));
-
                     acumulador.setCorrientePromedio1(acumulador.getCorrientePromedio1() +Float.parseFloat(el1.getCorriente1()));
                     acumulador.setCorrientePromedio2(acumulador.getCorrientePromedio2() +Float.parseFloat(el1.getCorriente2()));
                     acumulador.setCorrientePromedio3(acumulador.getCorrientePromedio3() +Float.parseFloat(el1.getCorriente3()));
+                    contador++;
                 }catch (Exception ignore1) {
 
                 }
@@ -469,14 +469,15 @@ public class SemanaFragment extends Fragment implements OnClickListener {
                         acmH = horaDato.getHours();
                     }
                     if (horaDato.getHours() == acmH){
-                        acumulador.setPotenciaPromedio1(Math.round(acumulador.getPotenciaPromedio1() * 1000)/1000);
-                        acumulador.setPotenciaPromedio2(Math.round(acumulador.getPotenciaPromedio2() * 1000)/1000);
-                        acumulador.setPotenciaPromedio3(Math.round(acumulador.getPotenciaPromedio3() * 1000)/1000);
-
-                        acumulador.setCorrientePromedio1(Math.round(acumulador.getCorrientePromedio1() * 1000)/1000);
-                        acumulador.setCorrientePromedio2(Math.round(acumulador.getCorrientePromedio2() * 1000)/1000);
-                        acumulador.setCorrientePromedio3(Math.round(acumulador.getCorrientePromedio3() * 1000)/1000);
+                        acumulador.setPotenciaPromedio1(acumulador.getPotenciaPromedio1() / contador);
+                        acumulador.setPotenciaPromedio2(acumulador.getPotenciaPromedio2() / contador);
+                        acumulador.setPotenciaPromedio3(acumulador.getPotenciaPromedio3() / contador);
+                        acumulador.setCorrientePromedio1(acumulador.getCorrientePromedio1() / contador);
+                        acumulador.setCorrientePromedio2(acumulador.getCorrientePromedio2() / contador);
+                        acumulador.setCorrientePromedio3(acumulador.getCorrientePromedio3() / contador);
                         irradianciaPorHoras.add(acumulador);
+                        acumulador = new DataAverage();
+                        contador=0;
                         acmH++;
                     } else {
                         if (horaDato.getHours() - 1 > acmH || acmH ==0){

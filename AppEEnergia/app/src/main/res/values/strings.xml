@@ -140,7 +140,7 @@
 
     <string name="potencia1">Pontencia 1 (W)</string>
     <string name="potencia2">Pontencia 2 (W)</string>
-    <strinag name="potencia3">Pontencia 3 (W)</strinag>
+    <string name="potencia3">Pontencia 3 (W)</string>
 
     <string name="c1">I1 (A)</string>
     <string name="c2">I2 (A)</string>
@@ -160,6 +160,16 @@
     <string name="potencia_vs_tiempo">Potencia (W) vs Tiempo</string>
     <string name="corriente_vs_tiempo">Corriente (A) vs Tiempo</string>
     <string name="potencia_corriente_vs_tiempo">Potencia(W), Corriente(A) vs Tiempo</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="leer_mas">Leer más</string>
+    <string name="circuito_1">Circuito 1</string>
+    <string name="circuito_2">Circuito 2</string>
+    <string name="circuito_3">Circuito 3</string>
+    <string name="energia_dia">Energía Día (W/día)</string>
+    <string name="potencia_maxima">Potencia Máxima (W)</string>
+    <string name="hora_potencia_maxima">Hora de Potencia Máxima</string>
+    <string name="potencia_minima">Potencia Mínima (W)</string>
+    <string name="hora_potencia_minima">Hora de Potencia Mínima</string>
 
 
 </resources>

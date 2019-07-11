@@ -65,10 +65,8 @@ public class CustomMarkerViewDataMonth extends MarkerView {
         getX1 = e.getX();
         int [] numDatos = new int[3];
         if (getCambioDeDatos()) {
-            MesFragment.titleData = getContext().getResources().getString(R.string.potencia_vs_tiempo);
             numDatos = new int[]{0, 1, 2};
         }else {
-            MesFragment.titleData = getContext().getResources().getString(R.string.corriente_vs_tiempo);
             numDatos = new int[]{3, 4, 5};
         }
         switch (highlight.getDataSetIndex() ) {
