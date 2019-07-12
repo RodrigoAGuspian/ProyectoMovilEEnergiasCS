@@ -369,25 +369,30 @@ public class IndexFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isChangeData){
+                    try {
+                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isChangeData){
 
-                                if (page<3){
-                                    mViewPager.setCurrentItem(page, true);
-                                    page++;
+                                    if (page<3){
+                                        mViewPager.setCurrentItem(page, true);
+                                        page++;
+                                    }else {
+                                        page = 0;
+                                        mViewPager.setCurrentItem(page, true);
+
+                                    }
+                                    Log.e("asd",""+page);
                                 }else {
-                                    page = 0;
-                                    mViewPager.setCurrentItem(page, true);
-
+                                    page = mViewPager.getCurrentItem();
                                 }
-                                Log.e("asd",""+page);
-                            }else {
-                                page = mViewPager.getCurrentItem();
                             }
-                        }
-                    });
+                        });
+                    }catch (Exception ignored){
+
+                    }
+
                 }
             }
         });
