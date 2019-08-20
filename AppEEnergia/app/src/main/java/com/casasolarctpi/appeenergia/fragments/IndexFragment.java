@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.casasolarctpi.appeenergia.R;
 import com.casasolarctpi.appeenergia.controllers.MenuActivity;
@@ -62,6 +63,7 @@ public class IndexFragment extends Fragment {
     private volatile boolean isViewLoad = true;
     ViewPager mViewPager;
     TabLayout tabLayout;
+    int conteo = 0;
     public IndexFragment() {
         // Required empty public constructor
     }
@@ -84,6 +86,7 @@ public class IndexFragment extends Fragment {
 
 
     //inicializacion de vistas
+    @SuppressLint("ClickableViewAccessibility")
     private void inizialite() {
         btnLeerMas = view.findViewById(R.id.btnLeerMas);
         mViewPager = view.findViewById(R.id.viewPager2);
@@ -98,6 +101,24 @@ public class IndexFragment extends Fragment {
         mViewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                page = tab.getPosition();
+                conteo = 0;
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                page = tab.getPosition();
+                conteo = 0;
+            }
+        });
 
         mViewPager.beginFakeDrag();
 
@@ -365,7 +386,7 @@ public class IndexFragment extends Fragment {
             public void run() {
                 while (isViewLoad){
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -373,20 +394,27 @@ public class IndexFragment extends Fragment {
                         Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (isChangeData){
+                                conteo++;
+                                if(conteo==5){
+                                    if (isChangeData){
 
-                                    if (page<3){
-                                        mViewPager.setCurrentItem(page, true);
-                                        page++;
+                                        if (page<3){
+                                            page++;
+                                            mViewPager.setCurrentItem(page, true);
+                                        }else {
+                                            page = 0;
+
+                                            mViewPager.setCurrentItem(page, true);
+
+                                        }
+                                        Log.e("asd",""+page);
                                     }else {
-                                        page = 0;
-                                        mViewPager.setCurrentItem(page, true);
+                                        page = mViewPager.getCurrentItem();
 
                                     }
-                                    Log.e("asd",""+page);
-                                }else {
-                                    page = mViewPager.getCurrentItem();
+                                    conteo = 0;
                                 }
+
                             }
                         });
                     }catch (Exception ignored){
