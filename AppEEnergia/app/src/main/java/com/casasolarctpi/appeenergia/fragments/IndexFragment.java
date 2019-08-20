@@ -375,15 +375,15 @@ public class IndexFragment extends Fragment {
                             public void run() {
                                 if (isChangeData){
 
-                                    if (page<3){
-                                        mViewPager.setCurrentItem(page, true);
+                                    if (page<2){
                                         page++;
+                                        mViewPager.setCurrentItem(page, true);
+
                                     }else {
                                         page = 0;
                                         mViewPager.setCurrentItem(page, true);
 
                                     }
-                                    Log.e("asd",""+page);
                                 }else {
                                     page = mViewPager.getCurrentItem();
                                 }

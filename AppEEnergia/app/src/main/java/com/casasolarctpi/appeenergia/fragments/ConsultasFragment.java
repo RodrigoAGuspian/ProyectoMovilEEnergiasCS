@@ -39,7 +39,7 @@ public class ConsultasFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        //dapter.addFrag(new SimpleFragment,"Title");
+
 
         adapter.addFrag(new DiaFragment(), getString(R.string.dia));
         adapter.addFrag(new SemanaFragment(), getString(R.string.semana));

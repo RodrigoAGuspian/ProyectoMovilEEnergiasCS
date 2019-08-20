@@ -170,6 +170,7 @@
     <string name="hora_potencia_maxima">Hora de Potencia Máxima</string>
     <string name="potencia_minima">Potencia Mínima (W)</string>
     <string name="hora_potencia_minima">Hora de Potencia Mínima</string>
+    <string name="restaurar_contrasena">Restaurar Contraseña</string>
 
 
 </resources>
