@@ -31,6 +31,7 @@ public class RestaurarContrasenaActivity extends AppCompatActivity implements On
         setContentView(R.layout.activity_restaurar_contrasena);
         findViewById(R.id.btnCambiarContrasena).setOnClickListener(this);
         findViewById(R.id.btnReestablecerContrasena).setOnClickListener(this);
+        getSupportActionBar().setTitle(getResources().getString(R.string.restaurar_contrasena));
         inizialiteFirebase();
     }
 
@@ -60,7 +61,6 @@ public class RestaurarContrasenaActivity extends AppCompatActivity implements On
         final Button btnAceptar = dialog.findViewById(R.id.btnAceptar1);
         final Button btnCancelar = dialog.findViewById(R.id.btnCancelar1);
         dialog.findViewById(R.id.pBCambioContra).setVisibility(View.INVISIBLE);
-
         btnAceptar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +187,7 @@ public class RestaurarContrasenaActivity extends AppCompatActivity implements On
         dialog.setContentView(R.layout.item_reestablecer_contrasena_dentro);
         final Button btnAceptar  = dialog.findViewById(R.id.btnAceptar1);
         final Button btnCancelar = dialog.findViewById(R.id.btnCancelar1);
+        dialog.findViewById(R.id.pbReestablecerD).setVisibility(View.INVISIBLE);
         btnAceptar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
