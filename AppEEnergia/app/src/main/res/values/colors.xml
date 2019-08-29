@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FC7323</color>
-    <color name="colorPrimaryDark">#FC7323</color>
-    <color name="colorAccent">#FFA453</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#71A411</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
 
     <color name="border_menu">#BBBBBB</color>
 
-    <color name="primaryColor">#2CC1B4</color>
-    <color name="primaryDarkColor">#009084</color>
-    <color name="colorAccent1">#2CC1B4</color>
+    <color name="primaryColor">#71A411</color>
+    <color name="primaryDarkColor">#71A411</color>
+    <color name="colorAccent1">#71A411</color>
 
     <color name="colorMenu">#000000</color>
     <color name="colorAzul">#1C88B0</color>

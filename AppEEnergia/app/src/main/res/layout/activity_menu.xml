@@ -18,7 +18,7 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/side_nav_bar"
+        android:background="@color/colorMenu"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_menu">
 
@@ -29,9 +29,8 @@
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="0dp"
-                android:layout_height="160dp"
+                android:layout_height="152dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"

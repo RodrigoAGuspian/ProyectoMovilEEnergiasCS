@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.casasolarctpi.appeenergia.R;
 import com.casasolarctpi.appeenergia.controllers.MenuActivity;
@@ -394,23 +395,21 @@ public class IndexFragment extends Fragment {
                             @Override
                             public void run() {
                                 conteo++;
-                                if(conteo==5){
+                                if(conteo>=5){
                                     if (isChangeData){
-                                        if (page<3){
+                                        if (page<2){
                                             page++;
-                                            mViewPager.setCurrentItem(page, true);
+
                                         }else {
                                             page = 0;
-                                            mViewPager.setCurrentItem(page, true);
 
                                         }
+                                        mViewPager.setCurrentItem(page, true);
                                     }else {
                                         page = mViewPager.getCurrentItem();
 
                                     }
                                     conteo = 0;
-                                }else {
-                                    page = mViewPager.getCurrentItem();
                                 }
 
                             }

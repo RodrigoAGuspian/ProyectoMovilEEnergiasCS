@@ -14,7 +14,7 @@
         android:layout_marginBottom="8dp"
         android:paddingStart="20dp"
         android:text="TextView"
-        android:textColor="@color/primaryDarkColor"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgChild"
@@ -28,7 +28,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/ic_link"
-        android:backgroundTint="@color/primaryDarkColor"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
